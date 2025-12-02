@@ -1,5 +1,5 @@
 // Alamat base URL untuk API backend Anda
-const API_URL = 'http://localhost:3001';
+const API_URL = 'https://kopichain-production.up.railway.app';
 
 document.addEventListener('DOMContentLoaded', () => {
     const formLogin = document.querySelector('#formLogin');
@@ -42,4 +42,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
 });
