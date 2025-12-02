@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   // --- BASE URL UNTUK API BACKEND ---
-  const API_URL = 'http://localhost:3001';
+  const API_URL = 'https://kopichain-production.up.railway.app';
   let html5QrCodeScanner = null; // Ini akan menyimpan objek scanner
   const qrScannerContainer = document.getElementById('qr-scanner-container');
   const btnMulaiScan = document.getElementById('btnMulaiScan');
@@ -360,4 +360,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Jalankan cek URL saat load
   prosesLacakDariUrl();
+
 });
