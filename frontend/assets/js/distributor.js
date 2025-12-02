@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // --- KONFIGURASI & VARIABEL STATE ---
-  const API_URL = 'http://localhost:3001';
+  const API_URL = 'https://kopichain-production.up.railway.app';
   
   let allData = [];       // Menyimpan SEMUA data dari database
   let filteredData = [];  // Menyimpan data yang sedang ditampilkan (hasil search)
@@ -243,4 +243,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Load Data Awal
   fetchAndDisplayDistributionHistory();
+
 });
