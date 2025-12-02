@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Distributor | KopiChain</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* =========================================
+           1. CORE VARIABLES & RESET
+           ========================================= */
+        :root {
+            --bg-obsidian: #0A0E1A;
+            --bg-dark-glass: rgba(10, 14, 26, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-surface: rgba(255, 255, 255, 0.05);
+            --electric-blue: #00A3FF;
+            --neon-green: #05FFC5;
+            --neon-purple: #9D00FF;
+            --cyber-red: #FF4747;
+            --text-primary: #ffffff;
+            --text-secondary: #94A3B8;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1, h2, h3, h4, h5, .font-tech {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        a { text-decoration: none; }
+
+        /* =========================================
+           2. BACKGROUND
+           ========================================= */
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(0, 163, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(5, 255, 197, 0.05) 0%, transparent 40%);
+        }
+
+        /* =========================================
+           3. HEADER & NAVIGATION
+           ========================================= */
+        .glass-header {
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            height: 76px;
+            transition: background 0.3s;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+
+        .indicator-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px currentColor; }
+
+        .btn-icon-only {
+            border: 1px solid rgba(255, 71, 71, 0.3);
+            color: var(--cyber-red);
+            background: rgba(255, 71, 71, 0.05);
+            transition: 0.3s;
+        }
+        .btn-icon-only:hover {
+            background: var(--cyber-red);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 71, 71, 0.5);
+            transform: rotate(90deg);
+        }
+
+        .user-pill { transition: 0.3s; border: 1px solid transparent; }
+        .user-pill:hover { border-color: var(--glass-border); background: rgba(255,255,255,0.1) !important; }
+
+        /* =========================================
+           4. CARDS & INPUTS
+           ========================================= */
+        .glass-card {
+            background: var(--glass-surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .hover-glow-blue:hover { border-color: rgba(0, 163, 255, 0.5); box-shadow: 0 10px 30px rgba(0, 163, 255, 0.1); transform: translateY(-5px); }
+        .hover-glow-green:hover { border-color: rgba(5, 255, 197, 0.5); box-shadow: 0 10px 30px rgba(5, 255, 197, 0.1); transform: translateY(-5px); }
+        .hover-glow-purple:hover { border-color: rgba(157, 0, 255, 0.5); box-shadow: 0 10px 30px rgba(157, 0, 255, 0.1); transform: translateY(-5px); }
+
+        .icon-box-soft { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .bg-blue { background: rgba(0, 163, 255, 0.1); }
+        .bg-green { background: rgba(5, 255, 197, 0.1); }
+        .bg-purple { background: rgba(157, 0, 255, 0.1); }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            color: white;
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: var(--electric-blue);
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 163, 255, 0.2);
+            outline: none;
+        }
+        
+        .btn-electric-blue {
+            background: var(--electric-blue); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 700; transition: 0.3s;
+        }
+        .btn-electric-blue:hover { background: #008EDF; box-shadow: 0 0 20px rgba(0, 163, 255, 0.4); }
+        
+        .border-top-electric { border-top: 3px solid var(--electric-blue); }
+        .form-label-tech { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; display: block; }
+        input[type="date"] { color-scheme: dark; }
+
+        /* =========================================
+           5. TABLE STYLING (DARK DATA GRID)
+           ========================================= */
+        .table-responsive { overflow-x: auto; }
+
+        .custom-cyber-table {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            width: 100%;
+        }
+
+        .custom-cyber-table thead th {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            padding-bottom: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .custom-cyber-table tbody tr {
+            background: rgba(255, 255, 255, 0.03);
+            transition: transform 0.2s;
+        }
+
+        .custom-cyber-table tbody tr:hover {
+            transform: scale(1.01);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .custom-cyber-table td {
+            border: none;
+            padding: 15px;
+            vertical-align: middle;
+            color: white;
+        }
+        
+        .custom-cyber-table td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            border-left: 3px solid var(--electric-blue);
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 600;
+            color: var(--electric-blue);
+        }
+
+        .custom-cyber-table td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        /* =========================================
+           6. PAGINATION
+           ========================================= */
+        .pagination-dark .page-item .page-link {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            margin: 0 2px;
+            min-width: 36px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .pagination-dark .page-item.active .page-link {
+            background: rgba(0, 163, 255, 0.15);
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+            box-shadow: 0 0 10px rgba(0, 163, 255, 0.2);
+        }
+        .pagination-dark .page-item.disabled .page-link { opacity: 0.5; cursor: not-allowed; border-color: transparent; }
+        .pagination-dark .page-link:hover:not(.active) { background: rgba(255, 255, 255, 0.08); color: white; }
+
+        .badge-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+        /* =========================================
+           7. MODAL QR CODE (OVERLAY)
+           ========================================= */
+        #qr-code-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 9999;
+            display: none;
+        }
+        .glass-modal-content {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(20, 25, 40, 0.9); border: 1px solid var(--electric-blue);
+            box-shadow: 0 0 50px rgba(0, 163, 255, 0.2); padding: 3rem; border-radius: 24px;
+            text-align: center; max-width: 90%; width: 400px;
+        }
+        .qr-wrapper { background: white; padding: 15px; border-radius: 12px; display: inline-block; margin: 20px 0; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .glass-header { height: auto; padding: 12px 0; }
+            .main-container { margin-top: 110px; }
+            .user-pill span { display: none; }
+            .custom-cyber-table { display: block; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+    
+    <header class="glass-header fixed-top">
+        <div class="container d-flex justify-content-between align-items-center h-100">
+            <a href="#" class="d-flex align-items-center gap-2 text-decoration-none">
+                <img src="assets/images/logo/logo.png" height="40" width="40"/>
+                <span class="fw-bold text-white font-tech fs-5 tracking-wide">KopiChain <span class="text-secondary small ms-1 fw-normal">| Mitra Distributor</span></span>
+            </a>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-md-flex align-items-center gap-2 text-secondary me-3" style="font-size: 0.75rem;">
+                    <span class="indicator-dot bg-success"></span> Sepolia Testnet Active
+                </div>
+
+                <div class="user-pill d-flex align-items-center gap-2 ps-1 pe-3 py-1 glass-card rounded-pill border-0" style="background: rgba(255,255,255,0.05);">
+                    <div class="bg-electric-blue rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 32px; height: 32px;">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="text-white fw-bold" style="font-size: 0.85rem; line-height: 1;">Distributor Gayo</span>
+                        <span class="text-secondary" style="font-size: 0.65rem;">ID: D-2025-88</span>
+                    </div>
+                </div>
+
+                <button onclick="logoutUser()" class="btn btn-icon-only btn-outline-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Keluar Sistem">
+                    <i class="bi bi-power"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container container" style="margin-top: 100px; padding-bottom: 50px;">
+        
+        <div class="row mb-5 align-items-end">
+            <div class="col-md-6">
+                <h2 class="text-white font-tech display-6 mb-1">Manajemen Distribusi</h2>
+                <p class="text-secondary mb-0">Perbarui status pengiriman, hasilkan QR Code, dan lacak logistik.</p>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <button class="btn btn-sm glass-input rounded-pill px-3 text-white border-secondary">
+                    <i class="bi bi-calendar3 me-2"></i> Periode: Bulan Ini
+                </button>
+            </div>
+        </div>
+
+        <div class="row mb-5 g-3">
+            <div class="col-md-4">
+                <div class="glass-card p-3 d-flex align-items-center justify-content-between hover-glow-blue">
+                    <div>
+                        <p class="text-secondary mb-1 small text-uppercase font-tech">Total Distribusi</p>
+                        <h3 class="text-white font-tech mb-0">1,250 <span class="fs-6 text-secondary fw-normal">Lot</span></h3>
+                    </div>
+                    <div class="icon-box-soft bg-blue">
+                        <i class="bi bi-box-seam-fill text-electric-blue fs-4"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-3 d-flex align-items-center justify-content-between hover-glow-green">
+                    <div>
+                        <p class="text-secondary mb-1 small text-uppercase font-tech">Dalam Pengiriman</p>
+                        <h3 class="text-white font-tech mb-0">45 <span class="fs-6 text-secondary fw-normal">Aktif</span></h3>
+                    </div>
+                    <div class="icon-box-soft bg-green">
+                        <i class="bi bi-truck text-neon-green fs-4"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-3 d-flex align-items-center justify-content-between hover-glow-purple">
+                    <div>
+                        <p class="text-secondary mb-1 small text-uppercase font-tech">Status Selesai</p>
+                        <h3 class="text-white font-tech mb-0">98%</h3>
+                    </div>
+                    <div class="icon-box-soft bg-purple">
+                        <i class="bi bi-check-circle-fill text-neon-purple fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8">
+                <div class="glass-card p-4 h-100 border-top-electric">
+                    <div class="d-flex align-items-center gap-2 mb-4 border-bottom border-secondary border-opacity-10 pb-3">
+                        <i class="bi bi-qr-code-scan text-electric-blue fs-4"></i>
+                        <h4 class="text-white font-tech mb-0">Update Status & Generate QR</h4>
+                    </div>
+                    
+                    <form id="formDistributor">
+                        
+                        <div class="mb-3">
+                            <label class="form-label-tech">Masukkan ID Lot (Dari Petani)</label>
+                            <input type="text" class="form-control glass-input" id="pilihIdLot" placeholder="Format: GAYO-YYYYMMDD-XXX" required>
+                            <div id="lot-validation-msg" class="form-text text-electric-blue small mt-1">
+                                <i class="bi bi-info-circle me-1"></i> Pastikan ID Lot sesuai dengan data Petani
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-tech">Nama Distributor / PT</label>
+                                <input type="text" class="form-control glass-input" id="namaDistributor" placeholder="Contoh: PT. Logistik Gayo" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-tech">Tanggal Diterima</label>
+                                <input type="date" class="form-control glass-input" id="tanggalDiterima" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label-tech">Tujuan Pengiriman</label>
+                            <input type="text" class="form-control glass-input" id="tujuanPengiriman" placeholder="Gudang / Roastery / Retail..." required>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2 text-secondary small">
+                                <i class="bi bi-link-45deg text-electric-blue"></i>
+                                <span>Blockchain Recorded</span>
+                            </div>
+                            <button type="submit" class="btn btn-electric-blue px-4 fw-bold d-flex align-items-center gap-2 hover-scale">
+                                <i class="bi bi-lightning-charge-fill"></i> Update & Cetak QR
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <h5 class="text-white font-tech mb-4">Aktivitas Distribusi</h5>
+                    <div style="position: relative; height: 250px;">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <small class="text-secondary">Grafik pengiriman barang mingguan.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-white font-tech mb-0">Riwayat Logistik</h4>
+                
+                <div class="d-flex gap-2">
+                     <div class="input-group">
+                        <span class="input-group-text glass-input border-end-0 text-secondary"><i class="bi bi-search"></i></span>
+                        <input type="text" id="searchDistribusiInput" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Cari ID Lot..." style="font-size: 0.9rem;">
+                     </div>
+                     <button class="btn btn-sm btn-outline-light rounded px-3" title="Export CSV">
+                        <i class="bi bi-download"></i>
+                     </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="custom-cyber-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID LOT</th>
+                            <th scope="col">NAMA DISTRIBUTOR</th>
+                            <th scope="col">TANGGAL TERIMA</th>
+                            <th scope="col">TUJUAN</th>
+                            <th scope="col" class="text-end pe-4">STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="distributor-list-body">
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary border-opacity-10">
+                <span class="text-secondary small" id="paginationInfo">Menampilkan 10 data terbaru</span>
+                
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-dark mb-0" id="distributor-pagination">
+                        </ul>
+                </nav>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="qr-code-container">
+        <div class="glass-modal-content">
+            <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" onclick="document.getElementById('qr-code-container').style.display='none'"></button>
+
+            <div class="text-neon-green fs-1 mb-2">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h3 class="text-white font-tech mb-2">Status Terupdate!</h3>
+            <p class="text-white-50 mb-4 small">Data telah tercatat di Blockchain. QR Code berikut siap dicetak pada kemasan.</p>
+
+            <div class="qr-wrapper shadow">
+                <img id="qr-code-image" src="" alt="QR Code akan muncul di sini" class="img-fluid" style="min-width: 150px; min-height: 150px;">
+            </div>
+
+            <div class="mt-3">
+                <a id="download-qr-link" href="#" class="btn btn-outline-light rounded-pill px-4 w-100" download="qr-code-kopi.png">
+                    <i class="bi bi-download me-2"></i> UNDUH .PNG
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function logoutUser() {
+            if(confirm('Apakah Anda yakin ingin keluar sistem?')) {
+                localStorage.removeItem('authToken');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Grafik Distribusi (Dummy Data)
+        const ctx = document.getElementById('distributionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar', // Menggunakan Bar Chart agar beda sedikit dari Petani
+            data: {
+                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+                datasets: [{
+                    label: 'Paket Terkirim',
+                    data: [12, 19, 8, 15, 22, 10],
+                    backgroundColor: 'rgba(0, 163, 255, 0.5)',
+                    borderColor: '#00A3FF',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#94A3B8' } },
+                    y: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#94A3B8' } }
+                }
+            }
+        });
+    </script>
+    
+    <script src="assets/js/distributor.js"></script>
+
+</body>
+</html>

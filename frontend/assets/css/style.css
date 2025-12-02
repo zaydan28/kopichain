@@ -1,0 +1,487 @@
+/* --------------------------------------------------------------
+   DASHBOARD
+   -------------------------------------------------------------- */
+:root {
+  --primary-color: #00BFFF;
+  --secondary-color: #1A3A3A;
+  --accent-color: #00BFFF;
+  /* --primary-color: #93C572;
+  --secondary-color: #1A3A3A;
+  --accent-color: #93C572; */
+  --accent-glow: rgba(0, 191, 255, 0.5);
+  --bg-dark: #0D0D0D;         /* Almost Black */
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --text-light: #E0E0E0;
+  --text-dark: #333;
+  --font-primary: 'Roboto', sans-serif;
+  --font-secondary: 'Rajdhani', sans-serif;
+  --bs-primary: var(--accent-color); /* Override Bootstrap primary color */
+  --bs-primary-rgb: 0, 191, 255;   /* Override Bootstrap primary color RGB */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  color: #fff;
+}
+
+.lead {
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+section {
+  padding: 80px 0;
+}
+
+/* --------------------------------------------------------------
+   HEADER / NAVBAR
+   (Diambil dari desain asli)
+   -------------------------------------------------------------- */
+.navbar {
+  transition: background-color 0.4s ease, padding 0.4s ease;
+}
+
+.navbar .navbar-brand {
+  font-family: var(--font-secondary);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.navbar .nav-link {
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: var(--accent-color);
+}
+
+.navbar-scrolled {
+  background-color: rgba(13, 13, 13, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* --------------------------------------------------------------
+   HERO SECTION
+   (Diambil dari desain asli)
+   -------------------------------------------------------------- */
+#hero {
+  min-height: 100vh;
+  /* background: linear-gradient(rgba(13, 13, 13, 0.7), rgba(13, 13, 13, 0.8)), url('https://images.unsplash.com/photo-1511920183353-3c7c9c5f8705?q=80&w=1932&auto=format&fit=crop'); Gambar Kopi Gayo */
+  /* background-size: cover; */
+  /* background-position: center; */
+  position: relative;
+  overflow: hidden;
+}
+
+#hero h1 {
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* --------------------------------------------------------------
+   BUTTON STYLES
+   (Diambil dari desain asli)
+   -------------------------------------------------------------- */
+.btn-primary {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--bg-dark);
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 12px 30px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #00a6d9;
+  border-color: #00a6d9;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px var(--accent-glow);
+  color: var(--bg-dark);
+}
+
+.btn-info {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+  color: #000;
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.video-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: 0; /* Posisikan video di lapisan paling belakang */
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Tambahkan nilai opacity untuk menggelapkan, 0.6 adalah contoh yang baik */
+  z-index: 1; /* Posisikan overlay di atas video */
+}
+
+.hero-content {
+  position: relative; /* Penting untuk z-index bekerja */
+  z-index: 2; /* Posisikan konten di lapisan paling depan, di atas video dan overlay */
+  /* Style lainnya jika perlu */
+}
+
+/* --------------------------------------------------------------
+   BAGIAN BARU: CARD UNTUK CARA KERJA & DAMPAK
+   -------------------------------------------------------------- */
+.step-card, .impact-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 8px;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover, .impact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+}
+
+.step-card h3 {
+    font-size: 3rem; /* Memperbesar emoji */
+}
+
+/* --------------------------------------------------------------
+   FORM STYLES (Untuk Bagian Lacak Kopi)
+   (Diambil dari desain asli)
+   -------------------------------------------------------------- */
+.bg-light-custom {
+  background-color: #000;
+}
+
+.form-control, .form-select {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Style for autofill background color */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus,
+.form-control:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+/* --------------------------------------------------------------
+   TIMELINE SECTION (HASIL LACAK KONSUMEN)
+   (Diambil dari desain asli)
+   -------------------------------------------------------------- */
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 18px;
+  height: 100%;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 30px;
+  padding-left: 50px;
+}
+
+.timeline-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.2rem;
+  border: 3px solid var(--bg-dark);
+  box-shadow: 0 0 15px var(--accent-glow);
+  z-index: 1;
+}
+
+.timeline-content {
+  background-color: var(--bg-card);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.timeline-title {
+  color: var(--accent-color);
+  margin-top: 0;
+}
+
+.bg-success-soft {
+  background-color: rgba(25, 135, 84, 0.15);
+  border-color: rgba(25, 135, 84, 0.3);
+}
+
+.tx-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.tx-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.tx-link i {
+    margin-right: 5px;
+}
+
+.text-success {
+  color: #198754 !important;
+}
+
+.titleAlur {
+    color: #00A6D9;
+    text-shadow: 2px 2px 4px rgba(0, 166, 217, 0.5);
+}
+
+.mainTitle {
+    /* color: #93C572; */
+    color: var(--primary-color);
+    /* text-shadow: 2px 2px 4px rgba(0, 166, 217, 0.7); */
+}
+
+footer {
+  background-color: #000;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border-color);
+}
+
+
+
+
+/* --------------------------------------------------------------
+   LOGIN PAGE STYLES
+   -------------------------------------------------------------- */
+
+/* Body untuk halaman login dengan background yang sama seperti hero */
+.login-page-body {
+  background: linear-gradient(rgba(13, 13, 13, 0.7), rgba(13, 13, 13, 0.8)), url('https://images.unsplash.com/photo-1511920183353-3c7c9c5f8705?q=80&w=1932&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Membuat background tidak ikut scroll */
+}
+
+/* Container utama untuk menengahkan kartu login */
+.login-container {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Kartu Login Utama dengan efek glassmorphism */
+.login-card {
+  background-color: rgba(13, 13, 13, 0.6); /* Lebih gelap untuk kontras */
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 40px 30px;
+  backdrop-filter: blur(15px); /* Efek Kaca Blur */
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.login-header .navbar-brand {
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.login-header .navbar-brand:hover {
+  color: var(--accent-color);
+}
+
+/* Kustomisasi untuk Checkbox di tema gelap */
+.form-check-input {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.form-check-input:checked {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.form-check-input:focus {
+  border-color: var(--accent-color);
+  outline: 0;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Link di footer kartu login */
+.login-footer a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-footer a:hover {
+  color: #fff !important;
+  text-decoration: underline;
+}
+
+
+
+
+
+/* --------------------------------------------------------------
+   PETANI DASHBOARD STYLES
+   -------------------------------------------------------------- */
+
+/* Body untuk halaman dashboard internal */
+.dashboard-body {
+  background-color: var(--bg-dark);
+}
+
+/* Header/Navbar Dashboard */
+.dashboard-header .navbar {
+  border-bottom: 1px solid var(--border-color);
+  background-color: #000; /* Warna hitam solid untuk navbar dashboard */
+}
+
+/* Konten utama, diberi padding atas agar tidak tertutup navbar */
+.dashboard-main-content {
+  padding-top: 100px; /* Sesuaikan jika tinggi navbar berubah */
+}
+
+/* Kartu konten untuk form dan tabel */
+.dashboard-card {
+  background-color: rgba(13, 13, 13, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Menyamakan tinggi form-select dengan form-floating input */
+.form-select {
+  height: 58px;
+}
+
+/* Kustomisasi Tabel agar lebih menyatu dengan tema */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--border-color);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.07);
+  --bs-table-hover-color: #fff;
+}
+
+.table thead th {
+  background-color: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Kustomisasi Pagination untuk tema gelap */
+.pagination .page-link {
+  background-color: transparent;
+  border-color: var(--border-color);
+  color: var(--text-light);
+  margin: 0 2px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--bg-dark);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--bg-dark);
+  font-weight: 700;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-floating > label {
+      color: #0a77e4;
+    }
+    .dashboard-card .form-control,
+    .dashboard-card .form-select {
+      color: #0a77e4;
+    }
+    .dashboard-card .form-select {
+      color: #0a77e4; 
+    }
+    .dashboard-card .form-select:focus,
+    .dashboard-card .form-select option:not([disabled]) {
+      color: #0a77e4;
+    }

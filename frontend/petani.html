@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Petani | KopiChain</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* =========================================
+           1. CORE VARIABLES & RESET
+           ========================================= */
+        :root {
+            --bg-obsidian: #0A0E1A;
+            --bg-dark-glass: rgba(10, 14, 26, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1); /* Kembali ke border terang lama */
+            --glass-surface: rgba(255, 255, 255, 0.05); /* Kembali ke surface terang lama */
+            --electric-blue: #00A3FF;
+            --neon-green: #05FFC5;
+            --neon-purple: #9D00FF;
+            --cyber-red: #FF4747;
+            --text-primary: #ffffff;
+            --text-secondary: #94A3B8;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1, h2, h3, h4, h5, .font-tech {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        a { text-decoration: none; }
+
+        /* =========================================
+           2. BACKGROUND
+           ========================================= */
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(5, 255, 197, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 10%, rgba(0, 163, 255, 0.08) 0%, transparent 40%);
+        }
+
+        /* =========================================
+           3. HEADER & NAVIGATION (Fitur Baru)
+           ========================================= */
+        .glass-header {
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            height: 76px;
+            transition: background 0.3s;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+
+        .indicator-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px currentColor; }
+
+        .btn-icon-only {
+            border: 1px solid rgba(255, 71, 71, 0.3);
+            color: var(--cyber-red);
+            background: rgba(255, 71, 71, 0.05);
+            transition: 0.3s;
+        }
+        .btn-icon-only:hover {
+            background: var(--cyber-red);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 71, 71, 0.5);
+            transform: rotate(90deg);
+        }
+
+        .user-pill { transition: 0.3s; border: 1px solid transparent; }
+        .user-pill:hover { border-color: var(--glass-border); background: rgba(255,255,255,0.1) !important; }
+
+        /* =========================================
+           4. CARDS & INPUTS (Style Lama yg Anda Suka)
+           ========================================= */
+        .glass-card {
+            background: var(--glass-surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+
+        /* Hover effects untuk kartu statistik */
+        .hover-glow-blue:hover { border-color: rgba(0, 163, 255, 0.5); box-shadow: 0 10px 30px rgba(0, 163, 255, 0.1); transform: translateY(-5px); }
+        .hover-glow-green:hover { border-color: rgba(5, 255, 197, 0.5); box-shadow: 0 10px 30px rgba(5, 255, 197, 0.1); transform: translateY(-5px); }
+        .hover-glow-purple:hover { border-color: rgba(157, 0, 255, 0.5); box-shadow: 0 10px 30px rgba(157, 0, 255, 0.1); transform: translateY(-5px); }
+
+        .icon-box-soft { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .bg-blue { background: rgba(0, 163, 255, 0.1); }
+        .bg-green { background: rgba(5, 255, 197, 0.1); }
+        .bg-purple { background: rgba(157, 0, 255, 0.1); }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3); /* Kembali ke style lama */
+            border: 1px solid var(--glass-border);
+            color: white;
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: 0.3s;
+        }
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: var(--neon-green);
+            color: white;
+            box-shadow: 0 0 10px rgba(5, 255, 197, 0.2);
+            outline: none;
+        }
+        
+        .btn-neon-green {
+            background: var(--neon-green); color: #000; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 700; transition: 0.3s;
+        }
+        .btn-neon-green:hover { background: #00cc9e; box-shadow: 0 0 20px rgba(5, 255, 197, 0.4); }
+        .border-top-neon { border-top: 3px solid var(--neon-green); }
+        .form-label-tech { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; display: block; }
+        input[type="date"] { color-scheme: dark; }
+
+        /* =========================================
+           5. TABLE STYLING (DIKEMBALIKAN KE DESAIN LAMA)
+           ========================================= */
+        .table-responsive { overflow-x: auto; }
+
+        .custom-cyber-table {
+            border-collapse: separate;
+            border-spacing: 0 10px; /* Memberi jarak antar baris */
+            width: 100%;
+        }
+
+        .custom-cyber-table thead th {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            padding-bottom: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* INI KUNCI WARNANYA: Kembali ke rgba(255, 255, 255, 0.03) */
+        .custom-cyber-table tbody tr {
+            background: rgba(255, 255, 255, 0.03);
+            transition: transform 0.2s;
+        }
+
+        .custom-cyber-table tbody tr:hover {
+            transform: scale(1.01);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .custom-cyber-table td {
+            border: none;
+            padding: 15px;
+            vertical-align: middle;
+            color: white; /* Pastikan teks putih */
+        }
+        
+        .custom-cyber-table td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            border-left: 3px solid var(--neon-green); /* Aksen kiri */
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 600;
+            color: var(--neon-green);
+        }
+
+        .custom-cyber-table td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        /* =========================================
+           6. PAGINATION (Tetap Modern)
+           ========================================= */
+        .pagination-dark .page-item .page-link {
+            background: rgba(255, 255, 255, 0.03); /* Samakan dgn tabel */
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            margin: 0 2px;
+            min-width: 36px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .pagination-dark .page-item.active .page-link {
+            background: rgba(5, 255, 197, 0.15);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(5, 255, 197, 0.2);
+        }
+        .pagination-dark .page-item.disabled .page-link { opacity: 0.5; cursor: not-allowed; border-color: transparent; }
+        .pagination-dark .page-link:hover:not(.active) { background: rgba(255, 255, 255, 0.08); color: white; }
+
+        .badge-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .glass-header { height: auto; padding: 12px 0; }
+            .main-container { margin-top: 110px; }
+            .user-pill span { display: none; }
+            .custom-cyber-table { display: block; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+    
+    <header class="glass-header fixed-top">
+        <div class="container d-flex justify-content-between align-items-center h-100">
+            <a href="#" class="d-flex align-items-center gap-2 text-decoration-none">
+                <img src="assets/images/logo/logo.png" height="40" width="40"/>
+                <span class="fw-bold text-white font-tech fs-5 tracking-wide">KopiChain <span class="text-secondary small ms-1 fw-normal">| Mitra Petani</span></span>
+            </a>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-md-flex align-items-center gap-2 text-secondary me-3" style="font-size: 0.75rem;">
+                    <span class="indicator-dot bg-success"></span> Sepolia Testnet Active
+                </div>
+
+                <div class="user-pill d-flex align-items-center gap-2 ps-1 pe-3 py-1 glass-card rounded-pill border-0" style="background: rgba(255,255,255,0.05);">
+                    <div class="bg-neon-green rounded-circle d-flex align-items-center justify-content-center text-dark fw-bold" style="width: 32px; height: 32px;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="text-white fw-bold" style="font-size: 0.85rem; line-height: 1;">Petani Gayo</span>
+                        <span class="text-secondary" style="font-size: 0.65rem;">ID: P-2025-01</span>
+                    </div>
+                </div>
+
+                <button onclick="logoutUser()" class="btn btn-icon-only btn-outline-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Keluar Sistem">
+                    <i class="bi bi-power"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container container" style="margin-top: 100px; padding-bottom: 50px;">
+        
+        <div class="row mb-5 align-items-end">
+            <div class="col-md-6">
+                <h2 class="text-white font-tech display-6 mb-1">Dashboard Overview</h2>
+                <p class="text-secondary mb-0">Kelola data panen dan pantau kinerja kebun Anda secara real-time.</p>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <button class="btn btn-sm glass-input rounded-pill px-3 text-white border-secondary">
+                    <i class="bi bi-calendar3 me-2"></i> Periode: Bulan Ini
+                </button>
+            </div>
+        </div>
+
+        <div class="row mb-5 g-3">
+            <div class="col-md-4">
+                <div class="glass-card p-3 d-flex align-items-center justify-content-between hover-glow-blue">
+                    <div>
+                        <p class="text-secondary mb-1 small text-uppercase font-tech">Total Berat Panen</p>
+                        <h3 class="text-white font-tech mb-0">1,250 <span class="fs-6 text-secondary fw-normal">Kg</span></h3>
+                    </div>
+                    <div class="icon-box-soft bg-blue">
+                        <i class="bi bi-speedometer2 text-electric-blue fs-4"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-3 d-flex align-items-center justify-content-between hover-glow-green">
+                    <div>
+                        <p class="text-secondary mb-1 small text-uppercase font-tech">Lot Terdaftar</p>
+                        <h3 class="text-white font-tech mb-0">24 <span class="fs-6 text-secondary fw-normal">Lot</span></h3>
+                    </div>
+                    <div class="icon-box-soft bg-green">
+                        <i class="bi bi-box-seam text-neon-green fs-4"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-3 d-flex align-items-center justify-content-between hover-glow-purple">
+                    <div>
+                        <p class="text-secondary mb-1 small text-uppercase font-tech">Estimasi Nilai</p>
+                        <h3 class="text-white font-tech mb-0">IDR 150jt</h3>
+                    </div>
+                    <div class="icon-box-soft bg-purple">
+                        <i class="bi bi-wallet2 text-purple fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8">
+                <div class="glass-card p-4 h-100 border-top-neon">
+                    <div class="d-flex align-items-center gap-2 mb-4 border-bottom border-secondary border-opacity-10 pb-3">
+                        <div class="bg-neon-green rounded p-1 d-flex"><i class="bi bi-plus-lg text-dark"></i></div>
+                        <h4 class="text-white font-tech mb-0">Input Data Panen Baru</h4>
+                    </div>
+                    
+                    <form id="formPetani">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-tech">Nama Petani / Koperasi</label>
+                                <input type="text" class="form-control glass-input" id="namaPetani" placeholder="Cth: Koperasi Gayo Mandiri" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label-tech">Lokasi Kebun</label>
+                                <input type="text" class="form-control glass-input" id="lokasiPanen" placeholder="Cth: Bener Meriah, Aceh" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label-tech">Tanggal Panen</label>
+                                <input type="date" class="form-control glass-input" id="tanggalPanen" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label-tech">Metode Proses</label>
+                                <select class="form-select glass-input" id="metodeProses" required>
+                                    <option selected disabled value="">Pilih...</option>
+                                    <option value="Natural">Natural</option>
+                                    <option value="Full Washed">Full Washed</option>
+                                    <option value="Honey">Honey</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label-tech">Berat Panen (Kg)</label>
+                                <input type="number" class="form-control glass-input" id="beratPanen" placeholder="0" required>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2 text-secondary small">
+                                <i class="bi bi-shield-lock-fill text-neon-green"></i>
+                                <span>Secured by Smart Contract</span>
+                            </div>
+                            <button type="submit" class="btn btn-neon-green px-4 fw-bold d-flex align-items-center gap-2 hover-scale">
+                                <span>Simpan Data</span> <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <h5 class="text-white font-tech mb-4">Tren Produksi</h5>
+                    <div style="position: relative; height: 220px;">
+                        <canvas id="harvestChart"></canvas>
+                    </div>
+                    <div class="mt-3 d-flex justify-content-center gap-3 text-secondary small">
+                        <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-neon-green"></span> Berat (Kg)</span>
+                        <span class="d-flex align-items-center gap-1"><span class="badge-dot bg-secondary"></span> Target</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-white font-tech mb-0">Riwayat Lot Panen</h4>
+                
+                <div class="d-flex gap-2">
+                     <div class="input-group">
+                        <span class="input-group-text glass-input border-end-0 text-secondary"><i class="bi bi-search"></i></span>
+                        <input type="text" id="searchLotInput" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Cari ID Lot..." style="font-size: 0.9rem;">
+                     </div>
+                     <button class="btn btn-sm btn-outline-light rounded px-3" title="Export CSV">
+                        <i class="bi bi-download"></i>
+                     </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="custom-cyber-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID LOT</th>
+                            <th scope="col">NAMA PETANI</th>
+                            <th scope="col">TGL PANEN</th>
+                            <th scope="col">METODE</th>
+                            <th scope="col">BERAT</th>
+                            <th scope="col" class="text-end pe-4">STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="petani-lot-list-body">
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary border-opacity-10">
+                <span class="text-secondary small" id="paginationInfo">Menampilkan 10 data terbaru</span>
+                
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-dark mb-0" id="petani-pagination">
+                        </ul>
+                </nav>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function logoutUser() {
+            if(confirm('Apakah Anda yakin ingin keluar sistem?')) {
+                localStorage.removeItem('authToken');
+                window.location.href = 'login.html';
+            }
+        }
+
+        const ctx = document.getElementById('harvestChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+                datasets: [{
+                    label: 'Berat (Kg)',
+                    data: [120, 190, 150, 250, 220, 300],
+                    borderColor: '#05FFC5',
+                    backgroundColor: 'rgba(5, 255, 197, 0.05)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#0A0E1A',
+                    pointBorderColor: '#05FFC5',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748B', font: {size: 10} } },
+                    y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748B', font: {size: 10} } }
+                }
+            }
+        });
+    </script>
+    
+    <script src="assets/js/petani.js"></script>
+
+</body>
+</html>
