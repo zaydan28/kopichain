@@ -20,10 +20,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const db = mysql.createPool({
-  host: 'localhost',      // Alamat server database Anda (biasanya 'localhost' untuk XAMPP)
-  user: 'root',           // Username default untuk XAMPP
-  password: '',           // Password default untuk XAMPP biasanya kosong
-  database: 'db_kopichain'  // Nama database yang sudah Anda buat
+  // Gunakan process.env agar membaca settingan dari Railway/Clever Cloud
+  host: process.env.DB_HOST, 
+  user: process.env.DB_USER, 
+  password: process.env.DB_PASS, 
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306 // Tambahan agar aman
 }).promise();
 
 console.log("Terhubung ke database MySQL...");
@@ -541,4 +543,5 @@ app.get('/api/distribusi', authenticateToken, async (req, res) => {
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
+
 });
